@@ -6,13 +6,18 @@ export * from "./models/auth";
 // === SETTINGS (Pricing) ===
 export const settings = pgTable("settings", {
   id: serial("id").primaryKey(),
-  priceExterior: integer("price_exterior").notNull().default(10), // Cents or dollars? Let's assume dollars for simplicity in prompt, but integer usually means cents. Let's use simple numbers for now.
+  priceExterior: integer("price_exterior").notNull().default(10),
   priceInterior: integer("price_interior").notNull().default(5),
   priceScreens: integer("price_screens").notNull().default(3),
   priceSills: integer("price_sills").notNull().default(3),
-  priceGutters: integer("price_gutters").notNull().default(50), // Flat fee or per ft? Assuming flat base for simple estimator
-  priceSolar: integer("price_solar").notNull().default(10), // Per panel
-  commercialMultiplier: text("commercial_multiplier").notNull().default("1.5"), // stored as text to avoid float precision issues in db, parse in app
+  priceGutters: integer("price_gutters").notNull().default(50),
+  priceSolar: integer("price_solar").notNull().default(10),
+  commercialMultiplier: text("commercial_multiplier").notNull().default("1.5"),
+  
+  // Email Template Settings
+  emailConfirmationSubject: text("email_confirmation_subject").notNull().default("Booking Confirmation - Utah Valley Window Cleaners"),
+  emailConfirmationBody: text("email_confirmation_body").notNull().default("Thank you for your booking! Your appointment is scheduled for {{date}}. Please note: you can change your date up to 2 days before the cleaning. Also, the quoted price is flexible; if you decide to add or subtract windows in person, we will adjust the final total accordingly."),
+  daysBeforeReschedule: integer("days_before_reschedule").notNull().default(2),
 });
 
 export const insertSettingsSchema = createInsertSchema(settings);

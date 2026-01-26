@@ -45,6 +45,14 @@ export async function registerRoutes(
     try {
       const input = api.bookings.create.input.parse(req.body);
       const booking = await storage.createBooking(input);
+      
+      // Send confirmation email (mock for now until integration selected)
+      const settings = await storage.getSettings();
+      console.log(`[Email Sent to ${booking.customerEmail}]`);
+      console.log(`Subject: ${settings.emailConfirmationSubject}`);
+      const body = settings.emailConfirmationBody.replace("{{date}}", booking.scheduledDate.toLocaleDateString());
+      console.log(`Body: ${body}`);
+      
       res.status(201).json(booking);
     } catch (err) {
       if (err instanceof z.ZodError) {
